@@ -1,0 +1,20 @@
+{
+    "name": "Game.Inventory",
+    "rootNamespace": "",
+    "references": [
+        "GUID:252b6705efb6315419f4ff71e5b53c97",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:a6c5f2b5da78c614e842e2d87b7b3bbd",
+        "GUID:0335c337b075c364691bc0ef1845e0e5",
+        "GUID:2191721ad628e8e48841d15360574ab5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

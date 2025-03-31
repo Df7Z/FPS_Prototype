@@ -1,0 +1,16 @@
+{
+    "name": "ECS_MONO",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0335c337b075c364691bc0ef1845e0e5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
