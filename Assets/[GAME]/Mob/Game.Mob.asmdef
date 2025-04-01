@@ -1,0 +1,20 @@
+{
+    "name": "Game.Mob",
+    "rootNamespace": "",
+    "references": [
+        "GUID:252b6705efb6315419f4ff71e5b53c97",
+        "GUID:0335c337b075c364691bc0ef1845e0e5",
+        "GUID:2d283b454b5fc434d8709c58e7d5e3c8",
+        "GUID:0d44cf0bc0ec11a4d88e61cef9cd041a",
+        "GUID:2191721ad628e8e48841d15360574ab5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

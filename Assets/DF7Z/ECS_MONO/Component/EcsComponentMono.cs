@@ -6,17 +6,17 @@ namespace ECS_MONO
    
     public abstract class EcsComponentMono : MonoBehaviour, IEcsComponent
     {
-        public virtual bool OnDespawnPoolDel => false;
+        
         public virtual uint Order => 0;
         
-        public IEntity Owner => _entity;
+        public IEntity Owner => _owner;
         public ComponentType ComponentType => ComponentType.Mono;
         
-        private IEntity _entity;
+        private IEntity _owner;
         
         public void RegisterEntity(IEntity entity)
         {
-            _entity = entity;
+            _owner = entity;
             
             OnRegisterEntity(entity);
         }
@@ -25,7 +25,7 @@ namespace ECS_MONO
         {
             OnUnregisterEntity(entity);
             
-            _entity = null;
+            _owner = null;
         }
         
         protected virtual void OnRegisterEntity(IEntity entity) {}

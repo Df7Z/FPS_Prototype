@@ -3,7 +3,11 @@ using System.Collections.Generic;
 
 using Game.Damage;
 using Game.Inventory;
+using Game.Mob;
+using Game.Mob.AI;
+using Game.Mobs;
 using Game.Player;
+using Game.Projectile;
 
 
 namespace ECS_MONO
@@ -18,11 +22,15 @@ namespace ECS_MONO
             worlds.Add(gameObject.AddComponent<DefaultWorld>());
             worlds.Add(gameObject.AddComponent<PlayerWorld>());
             worlds.Add(gameObject.AddComponent<InventoryWorld>());
+            worlds.Add(gameObject.AddComponent<AIWorld>());
+            worlds.Add(gameObject.AddComponent<MobWorld>());
+            worlds.Add(gameObject.AddComponent<ProjectileWorld>());
         }
 
         private void InitWorlds(List<EcsWorld> worlds)
         {
             worlds.Add(gameObject.AddComponent<DamageWorld>());
+           
         }
         
         protected override void Init()

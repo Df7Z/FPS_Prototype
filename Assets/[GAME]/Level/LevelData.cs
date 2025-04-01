@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-namespace ECS_MONO.Level
+namespace Game.Level
 {
     [CreateAssetMenu(fileName = "Level", menuName = "Game/Level/SD")]
-    public class LevelData : ScriptableObject
+    internal class LevelData : ScriptableObject
     {
         [SerializeField] private GameLevel _levelPrefab;
 

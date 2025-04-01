@@ -1,15 +1,18 @@
 ﻿using ECS_MONO;
+using Game.Damage;
 using UnityEngine;
 
 namespace Game.Inventory
 {
-    internal sealed class ItemCollectorSystem : EcsSystemMono<ItemCollector>
+    internal sealed class ItemCollectorSystem : EcsSystemMono<ItemCollector, CanCollectItem>
     {
         private Collider[] _colliders = new Collider[4];
         
-        protected override void FixedRun(EntityMono e, ItemCollector c1)
+        protected override void FixedRun(EntityMono e, ItemCollector collector, CanCollectItem canCollectItem)
         {
-            TryCollect(c1);
+            if (collector.OwnerInventory.Entity.Has<DamagedDead>()) return; //Make CanCollect tag
+            
+            TryCollect(collector);
         }
 
         private void TryCollect(ItemCollector collector)

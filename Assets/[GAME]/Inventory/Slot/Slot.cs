@@ -1,5 +1,6 @@
 ﻿using System;
 using ECS_MONO;
+using PoolSystem;
 
 namespace Game.Inventory
 {
@@ -17,6 +18,9 @@ namespace Game.Inventory
             _item = entity;
             _collector = collector;
 
+            //Do item child collector 
+            _item.transform.parent = _collector.transform; 
+          
             UpdateView();
         }
 
@@ -59,8 +63,10 @@ namespace Game.Inventory
 
         public void Clear()
         {
+            SystemPool.Despawn(_item.gameObject);
+            
             _item = null;
-
+            
             UpdateView();
         }
     }

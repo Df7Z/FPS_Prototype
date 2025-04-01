@@ -3,6 +3,11 @@ using ECS_MONO;
 
 namespace Game.Damage
 {
+    public sealed class DamagedDead : EcsComponent
+    {
+        
+    }
+
     public sealed class DamagedRuntime : EcsComponent
     {
         private uint _current;
@@ -30,6 +35,8 @@ namespace Game.Damage
                 _current = 0;
 
                 UpdateUI();
+
+                Dead();
                 
                 return;
             }
@@ -39,11 +46,21 @@ namespace Game.Damage
             UpdateUI();
         }
 
+        private void Dead()
+        {
+            Owner.Add<DamagedDead>();
+        }
+        
         private void UpdateUI()
         {
             if (Owner.Has<DamagedUIView>())
             {
                 Owner.Get<DamagedUIView>().SetCountText(_current.ToString());
+            }
+            
+            if (Owner.Has<Damaged3DUIView>())
+            {
+                Owner.Get<Damaged3DUIView>().SetCountText(_current.ToString());
             }
         }
     }

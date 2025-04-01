@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using ECS_MONO;
 using Game.Inventory.HealthPack;
+using Game.Inventory.Shared;
 using UnityEditor;
 
 namespace Game.Inventory
@@ -11,6 +13,10 @@ namespace Game.Inventory
         protected override void InitSystems()
         {
             CreateUpdateSystem<InventoryInitializerSystem>();
+            
+            CreateUpdateSystem<PlayerResetInventorySystem>();
+            
+            CreateUpdateSystem<ClearSlotSystem>();
             
             CreateUpdateSystem<InventoryChangeViewSystem>();
             CreateUpdateSystem<HotSlotSwitchSystem>();
@@ -31,7 +37,14 @@ namespace Game.Inventory
             
             CreateUpdateSystem<ItemSwaySystem>();
             
-            CreateFixedUpdateSystem<ItemCollectorSystem>();  
+            CreateFixedUpdateSystem<ItemCollectorSystem>();
+            CreateLateUpdateSystem<ChangeCanCollectSystem>();
+
+        }
+
+        protected override void InitPools(in Dictionary<Type, IEcsWorldComponentPoolBase> p)
+        {
+            p.Add(typeof(PlayerInventory), new EcsWorldComponentPool<PlayerInventory>());
         }
     }
 }

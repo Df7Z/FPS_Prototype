@@ -79,19 +79,10 @@ namespace Game.Inventory
 
                     if (slot.HasView)
                     {
-                        SystemPool.Despawn(slot.HotView);
+                        SystemPool.Despawn(slot.HotView.gameObject);
 
                         slot.SetView(null);
-                        
                     }
-                    /*
-                    if (!inventory.Slots[i].IsEmpty)
-                    {
-                        if (inventory.Slots[i].Item.Owner.Has<PlayerInput>())
-                        {
-                            inventory.Slots[i].Item.Owner.Del<PlayerInput>();
-                        }
-                    }*/
                     
                     inventory.Slots[i].Owner.SafeDel<SelectedHot>();
                 }

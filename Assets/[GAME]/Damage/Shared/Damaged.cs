@@ -13,18 +13,23 @@ namespace Game.Damage
 
         public uint EnduranceDefault => enduranceDefault;
         
-        public override void OnDespawnPool(IEntity entity) => Initialize(entity);
+        public override void OnDespawnPool(IEntity entity) => ResetToDefault();
 
-        protected override void OnRegisterEntity(IEntity entity) => Initialize(entity);
+        protected override void OnRegisterEntity(IEntity entity) => ResetToDefault();
         
-        private void Initialize(IEntity entity)
+        public void ResetToDefault()
         {
-            if (!entity.Has<DamagedRuntime>())
+            if (Owner.Has<DamagedDead>())
             {
-                entity.Add<DamagedRuntime>();
+                Owner.Del<DamagedDead>();
             }
             
-            entity.Get<DamagedRuntime>().Set(enduranceDefault);
+            if (!Owner.Has<DamagedRuntime>())
+            {
+                Owner.Add<DamagedRuntime>();
+            }
+            
+            Owner.Get<DamagedRuntime>().Set(enduranceDefault);
         }
     }
 }

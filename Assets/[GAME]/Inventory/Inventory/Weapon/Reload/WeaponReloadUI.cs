@@ -13,11 +13,10 @@ namespace Game.Inventory
 
         public void SetCurrent(string text) => _outCurrent.text = text;
 
-        public void SetInventory(string text) => _outInventory.text = text;
+        private void SetInventory(string text) => _outInventory.text = text;
 
-        private void Awake()
+        protected override void OnRegisterEntity(IEntity entity)
         {
-            SetCurrent(string.Empty);
             SetInventory(string.Empty);
         }
     }

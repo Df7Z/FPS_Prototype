@@ -6,6 +6,17 @@ namespace Game.Inventory
 {
     internal static class ItemCollectorFunctions
     {
+        public static void Clear(this ItemCollector collector)
+        {
+            foreach (var inventory in collector.Inventories)
+            {
+                foreach (var slot in inventory.Slots)
+                {
+                    slot.Owner.Add<ClearSlotSignal>();
+                }
+            }
+        }
+
         public static int GetCount(this ItemCollector collector, ItemId id)
         {
             int result = 0;

@@ -1,0 +1,19 @@
+{
+    "name": "Game.Projectile",
+    "rootNamespace": "",
+    "references": [
+        "GUID:252b6705efb6315419f4ff71e5b53c97",
+        "GUID:2191721ad628e8e48841d15360574ab5",
+        "GUID:41937d86d6c0e4446809bd7969106562",
+        "GUID:0335c337b075c364691bc0ef1845e0e5"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

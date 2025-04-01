@@ -15,9 +15,6 @@ namespace ECS_MONO
         private List<IEcsSystem<E>> _updateSystems;
         private List<IEcsSystem<E>> _fixedSystems;
         private List<IEcsSystem<E>> _lateSystems;
-
-        private WorldComponentPool<E, EcsComponent> _worldComponentPool;
-        private WorldComponentPool<E, EcsComponentMono> _worldComponentMonoPool;
         
         private Dictionary<Type, IEcsWorldComponentPoolBase> _pools;
 
@@ -36,21 +33,9 @@ namespace ECS_MONO
             throw new Exception("Pool not created! Show InitPools method!");
         }
 
-        protected virtual void InitPools(in Dictionary<Type, IEcsWorldComponentPoolBase> p)
-        {
-        }
-      
-        
-        public virtual E CreateEntity()
-        {
-            return null;
-        }
-
-        public virtual void DestroyEntity(E entity)
-        {
-        }
-
-        
+        protected virtual void InitPools(in Dictionary<Type, IEcsWorldComponentPoolBase> p) { }
+        public virtual E CreateEntity() => null;
+        public virtual void DestroyEntity(E entity) { }
         
         public void RegisterEntity(E entity)
         {
@@ -165,9 +150,6 @@ namespace ECS_MONO
         public void InitWorld(IEcsCore core)
         {
             _core = core;
-
-            _worldComponentPool = new WorldComponentPool<E, EcsComponent>(this);
-            _worldComponentMonoPool = new WorldComponentPool<E, EcsComponentMono>(this);
             
             Init();
         }
@@ -200,6 +182,8 @@ namespace ECS_MONO
             InitPools(_pools);
         }
 
+        #region SYSTEMS
+        
         protected abstract void InitSystems();
 
         protected void CreateUpdateSystem<T>() where T : EcsSystemAbstract<E> =>
@@ -256,5 +240,7 @@ namespace ECS_MONO
                 system.DestructFromWorld(this);
             }
         }
+        
+        #endregion
     }
 }

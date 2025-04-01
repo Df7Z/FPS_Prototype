@@ -28,4 +28,13 @@ namespace ECS_MONO
         where C4 : class, IEcsComponent
     {
     }
+    
+    public class EcsSystemMono<C1, C2, C3, C4, C5> : EcsSystemAbstract<EntityMono, C1, C2, C3, C4, C5>
+        where C1 : class, IEcsComponent
+        where C2 : class, IEcsComponent
+        where C3 : class, IEcsComponent
+        where C4 : class, IEcsComponent
+        where C5 : class, IEcsComponent
+    {
+    }
 }

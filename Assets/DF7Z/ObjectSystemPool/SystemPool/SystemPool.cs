@@ -91,13 +91,12 @@ namespace PoolSystem
             
             return DefaultSpawn(toSpawn, position, rotation, parent, worldPositionStays);
         }
-
-        public static void Despawn(Component toDespawn, float delay = 0f)
+        public static void Despawn(GameObject toDespawn)
         {
-            DefaultDespawn(toDespawn.gameObject, delay);
+            DefaultDespawn(toDespawn);
         }
-
-        public static void Despawn(GameObject toDespawn, float delay = 0f)
+        
+        public static void Despawn(GameObject toDespawn, float delay)
         {
             DefaultDespawn(toDespawn, delay);
         }
@@ -234,6 +233,38 @@ namespace PoolSystem
             CheckForSpawnEvents(gameObject);
             
             return gameObject;
+        }
+        
+        private static void DefaultDespawn(GameObject toDespawn)
+        {
+            if (IsEditor)
+                return;
+
+            if (toDespawn.TryGetComponent(out Poolable poolable))
+            {
+                var pool = poolable.Pool;
+
+                if (pool != null)
+                {
+                    toDespawn.SetActive(false);
+                    toDespawn.transform.SetParent(pool.PoolablesParent);
+                
+                    pool.IncludePoolable(poolable);
+                }
+                else
+                {
+                    Object.Destroy(toDespawn);
+                }
+
+                CheckForDespawnEvents(toDespawn);
+            }
+            else
+            {
+#if DEBUG && EnableDebug
+                Debug.LogWarning($"{toDespawn.name} was not spawned by Pool and will be destroyed!");
+#endif
+                Object.Destroy(toDespawn);
+            }
         }
         
         /// <summary>

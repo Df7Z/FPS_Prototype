@@ -1,5 +1,6 @@
 ﻿using ECS_MONO;
 using Game.Player;
+using UnityEngine;
 
 namespace Game.Inventory
 {
@@ -48,18 +49,26 @@ namespace Game.Inventory
             {
                 if (!_playerInput.Owner.Has<ChangeInputStateSignal>())
                 {
-                    var signal = _playerInput.Owner.Add<ChangeInputStateSignal>();
+                    var signalInput = _playerInput.Owner.Add<ChangeInputStateSignal>();
+                    
+                    signalInput.Target = PlayerInputState.Default;
+                    
+                    var signalCursor = _playerInput.Owner.Add<ChangeCursorSignal>();
 
-                    signal.Target = PlayerInputState.Default;
+                    signalCursor.Target = CursorLockMode.Locked;
                 }
             }
             else
             {
                 if (!_playerInput.Owner.Has<ChangeInputStateSignal>())
                 {
-                    var signal = _playerInput.Owner.Add<ChangeInputStateSignal>();
+                    var signalInput = _playerInput.Owner.Add<ChangeInputStateSignal>();
 
-                    signal.Target = PlayerInputState.Inventory;
+                    signalInput.Target = PlayerInputState.Inventory;
+                    
+                    var signalCursor = _playerInput.Owner.Add<ChangeCursorSignal>();
+
+                    signalCursor.Target = CursorLockMode.None;
                 }
             }
 

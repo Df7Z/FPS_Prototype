@@ -6,5 +6,10 @@ namespace Game.Inventory
     {
         public Item PickupItem;
         public ItemCollector ItemCollector;
+
+        public override void OnDespawnPool()
+        {
+            Delete(this);
+        }
     }
 }

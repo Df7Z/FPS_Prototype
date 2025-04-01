@@ -1,0 +1,16 @@
+{
+    "name": "Game.Mob.Shared",
+    "rootNamespace": "",
+    "references": [
+        "GUID:252b6705efb6315419f4ff71e5b53c97"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

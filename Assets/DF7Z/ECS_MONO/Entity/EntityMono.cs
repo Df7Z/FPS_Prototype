@@ -7,9 +7,8 @@ using Object = UnityEngine.Object;
 
 namespace ECS_MONO
 {
-    public class EntityMono : MonoBehaviour, IEntityMono, IPoolItem
+    public sealed class EntityMono : MonoBehaviour, IEntityMono, IPoolItem
     {
-        //[SerializeField] [Tooltip("Сущность при создании автоматически добавляется в мир")] private bool _autoInject = true;
         [SerializeField] private WorldId _world = WorldId.Default;
 
         private const int _initSizeCollection = 8;
@@ -17,7 +16,9 @@ namespace ECS_MONO
         private HashSet<Type> _types;
         private EcsWorldAbstract<EntityMono> _entityWorld;
         private EcsCore _core;
-        
+        private bool _inPool;
+
+        public bool InPool => _inPool;
         public void OnSpawn() => SpawnFromPool();
         public void OnDespawn() => DespawnFromPool();
         public HashSet<IEcsComponent> Components => _components;
@@ -53,7 +54,7 @@ namespace ECS_MONO
                 _components.Add(component);
                 _types.Add(component.GetType());
                 component.RegisterEntity(this);
-                component.OnSpawnPool();   
+                component.OnSpawnPool(this);   
             }
 
             var adaptersComponents = GetComponents<IComponentAdapter>().OrderBy(adapter => adapter.Order).ToArray();
@@ -69,11 +70,7 @@ namespace ECS_MONO
             _entityWorld.OnEntityAddComponents(this);
         }
 
-        private void OnDestroy()
-        {
-            EcsCore.OnInitialized -= CoreInitialize;
-        }
-
+       
         private void Awake()
         {
             _components = new HashSet<IEcsComponent>(_initSizeCollection);
@@ -84,30 +81,40 @@ namespace ECS_MONO
 
         private void SpawnFromPool() 
         {
-            if (_entityWorld == null)
-                _core.GetWorld<EntityMono>(_world).RegisterEntity(this);
+            var world = _core.GetWorld<EntityMono>(_world);
             
+            world.RegisterEntity(this);
+            
+            ErrorWorld();
+            
+            _inPool = false;
+            
+            __temp.Clear();
+           
             foreach (var component in _components)
-                component.OnSpawnPool();   
+                __temp.Add(component);
+            
+            foreach (var component in __temp)
+                component.OnSpawnPool(this); //Добавление, удаление при спавне
         }
 
         private HashSet<IEcsComponent> __temp = new HashSet<IEcsComponent>();
 
         private void DespawnFromPool()
         {
-            _entityWorld.UnregisterEntity(this);
-
+            ErrorWorld();
+         
+            _inPool = true;
+            
             __temp.Clear();
-            
-            //IEcsComponent[] componentsNew = new IEcsComponent[_components.Count];
-            //_components.CopyTo(componentsNew);
-            
+           
             foreach (var component in _components)
                 __temp.Add(component);
             
             foreach (var component in __temp)
-                component.OnDespawnPool();
+                component.OnDespawnPool(this);
             
+            _entityWorld.UnregisterEntity(this);
         }
 
         public void Clear()
@@ -135,6 +142,18 @@ namespace ECS_MONO
             _types.Clear();
         }
 
+        private void OnDestroy()
+        {
+            if (_entityWorld != null)
+            {
+                //Remove entity from world
+                _entityWorld.DestroyEntity(this);
+            }
+
+            EcsCore.OnInitialized -= CoreInitialize;
+        }
+
+        
         public void RegisterInWorld<E>(IEcsWorld<E> world) where E : class, IEntity
         {
             ErrorType();
@@ -201,7 +220,7 @@ namespace ECS_MONO
         
         public C SafeAdd<C>() where C : class, IEcsComponent, new()
         {
-            if (Has<C>()) return null;
+            if (Has<C>()) return Get<C>();
             
             return Add(ComponentPool.Give<C>());
         }

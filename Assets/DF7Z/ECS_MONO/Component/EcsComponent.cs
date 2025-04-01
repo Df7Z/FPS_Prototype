@@ -28,6 +28,9 @@ namespace ECS_MONO
             
             _entity = null;
         }
+
+        public void OnSpawnPool(IEntity entity) => OnSpawnPool();
+        public void OnDespawnPool(IEntity entity) => OnDespawnPool();
         
         protected virtual void OnRegisterEntity(IEntity entity) {}
         protected virtual void OnUnregisterEntity(IEntity entity) {}

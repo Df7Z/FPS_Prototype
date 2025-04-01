@@ -7,8 +7,8 @@ namespace ECS_MONO
     [Serializable]
     public class EntityAnimation
     {
-        public bool HasClips => _clipNames != null;
-
+        public bool HasClips => _clipNames != null && _clipNames.Length > 0;
+        
         public void SetClipNames(string[] n) => _clipNames = n;
         
         [SerializeField] private string[] _clipNames;

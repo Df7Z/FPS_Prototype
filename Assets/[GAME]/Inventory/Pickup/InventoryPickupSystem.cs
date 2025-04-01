@@ -1,5 +1,6 @@
 ﻿using System;
 using ECS_MONO;
+using Game.Level.Shared;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,9 +10,9 @@ namespace Game.Inventory
     {
         protected override void Run(EntityMono e, Item c1, PickupSignal c2)
         {
+            e.Del<PickupSignal>();
+            
             Pickup(c1, c2);
-
-            e.Del(c2);
         }
 
         private void Pickup(Item item, PickupSignal signal)
@@ -20,11 +21,18 @@ namespace Game.Inventory
 
             foreach (var inventory in collector.Inventories)
             {
-                if ((inventory.Owner.Has<HotInventory>() && item.Owner.Has<HotItem>()) ||
-                    (inventory.Owner.Has<StorageInventory>() && item.Owner.Has<StorageItem>()))
+                if (inventory.Owner.Has<HotInventory>() && item.Owner.Has<HotItem>())
                 {
                     CollectToInventory(item, collector, inventory);
+                    return;
                 }
+                
+                if (inventory.Owner.Has<StorageInventory>() && item.Owner.Has<StorageItem>())
+                {
+                    CollectToInventory(item, collector, inventory);
+                    return;
+                }
+                
             }
         }
 
@@ -85,10 +93,10 @@ namespace Game.Inventory
             //Disable map item view
             if (item.Owner.Has<ItemView>())
             {
-                item.Owner.Get<ItemView>().ViewTransform.gameObject.SetActive(false);
+                item.Owner.Get<ItemView>().SetView(false);
             }
 
-           // UpdateSlotUI(slot);
+            //UpdateSlotUI(slot);
         }
     }
 }

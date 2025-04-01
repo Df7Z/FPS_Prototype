@@ -1,0 +1,17 @@
+{
+    "name": "Game.Level.Shared",
+    "rootNamespace": "",
+    "references": [
+        "GUID:252b6705efb6315419f4ff71e5b53c97",
+        "GUID:5f28d3712bc1f964eaf0159fc8156328"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

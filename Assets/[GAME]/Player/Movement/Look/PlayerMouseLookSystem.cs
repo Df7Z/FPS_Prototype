@@ -21,15 +21,5 @@ namespace Game.Player.Look
 
             view.Player.Rotate(Vector3.up, input.Axis.x * runtime.Sens);
         }
-        
-        /*
-        private void SetLook(Quaternion rot)
-        {
-            _view.rotation = Quaternion.Euler(rot.eulerAngles.x, rot.eulerAngles.y, 0);
-            _player.rotation = Quaternion.Euler(0, rot.eulerAngles.y, 0);
-            xRotation = rot.eulerAngles.x;
-            yRotation = rot.eulerAngles.y;
-        }
-        */
     }
 }

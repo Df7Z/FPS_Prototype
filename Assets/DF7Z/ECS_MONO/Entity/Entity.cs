@@ -106,7 +106,7 @@ namespace ECS_MONO
         
         public C SafeAdd<C>() where C : class, IEcsComponent, new()
         {
-            if (Has<C>()) return null;
+            if (Has<C>()) return Get<C>();
             
             return Add(ComponentPool.Give<C>());
         }

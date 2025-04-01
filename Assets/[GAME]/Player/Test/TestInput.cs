@@ -15,10 +15,10 @@ namespace Game.Player.Test
                 damage.CreateTransaction(e.Get<Damaged>(), e);
             }
             
-            if (Input.GetKey(KeyCode.Z))
+            if (Input.GetKeyDown(KeyCode.Z))
             {
                 var damage = new DamageData();
-                
+                damage.Set(9999);
                 damage.CreateTransaction(e.Get<Damaged>(), e);
             }
         }

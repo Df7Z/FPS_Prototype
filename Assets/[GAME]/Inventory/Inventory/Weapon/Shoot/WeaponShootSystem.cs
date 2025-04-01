@@ -1,4 +1,5 @@
 ﻿using ECS_MONO;
+using Game.Projectile.Shared;
 using PoolSystem;
 using UnityEngine;
 
@@ -25,7 +26,7 @@ namespace Game.Inventory
 
                 if (runtime.Current > 0)
                 {
-                    DoShoot(e, shoot);
+                    DoShoot(e, view, shoot);
                     
                     //Take ammo
                     runtime.Take(1);
@@ -37,7 +38,7 @@ namespace Game.Inventory
             }
             else
             {
-                DoShoot(e, shoot);
+                DoShoot(e, view, shoot);
             }
         }
 
@@ -48,15 +49,17 @@ namespace Game.Inventory
             e.Add<ReloadInteractSignal>();
         }
 
-        private void DoShoot(EntityMono e, WeaponShoot shoot)
+        private void DoShoot(EntityMono e, ItemHotSlotView view, WeaponShoot shoot)
         {
             if (shoot.Owner.TryGet(out EntityAnimator animator))
             {
-                animator.Play(shoot.Animation);
+                if (shoot.Animation.HasClips) animator.Play(shoot.Animation);
             }
-            
-            Debug.Log("Spawn projectile");
 
+            shoot.RaycastProjectileData.CreateProjectile(
+                view.OwnerSlot.Collector.OwnerInventory.Entity,
+                shoot.ProjectileSpawnPoint);
+            
             SystemPool.Spawn(shoot.FlashPrefab, shoot.FlashSpawnPoint.position, shoot.FlashSpawnPoint.rotation);
 
             var wait = e.Add<WeaponShootExpectation>();
