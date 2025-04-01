@@ -10,7 +10,7 @@ namespace Game.Inventory
         
         protected override void FixedRun(EntityMono e, ItemCollector collector, CanCollectItem canCollectItem)
         {
-            if (collector.OwnerInventory.Entity.Has<DamagedDead>()) return; //Make CanCollect tag
+            //if (collector.OwnerInventory.Entity.Has<DamagedDead>()) return; //Make CanCollect tag
             
             TryCollect(collector);
         }
@@ -32,7 +32,6 @@ namespace Game.Inventory
                             var signal = entityReference.Entity.Add<PickupSignal>();
 
                             signal.ItemCollector = collector;
-                            signal.PickupItem = entityReference.Entity.Get<Item>();
                         }
                     }
                 }

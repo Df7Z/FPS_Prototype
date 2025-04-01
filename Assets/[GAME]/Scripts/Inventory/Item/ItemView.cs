@@ -9,7 +9,7 @@ namespace Game.Inventory
 
         public void SetView(bool value) => _viewTransform.gameObject.SetActive(value);
 
-        public override void OnDespawnPool(IEntity entity)
+        public override void OnSpawnPool(IEntity entity)
         {
             SetView(true);
         }
