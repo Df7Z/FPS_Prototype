@@ -1,5 +1,5 @@
 ﻿using ECS_MONO;
-using Game.Mob.AI;
+
 
 namespace Game.AI
 {

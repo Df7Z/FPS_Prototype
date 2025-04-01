@@ -1,7 +1,6 @@
 ﻿using ECS_MONO;
 using Game.AI;
 using Game.AI.Shared;
-using Game.Mob.AI;
 using UnityEngine;
 
 namespace Game.AI

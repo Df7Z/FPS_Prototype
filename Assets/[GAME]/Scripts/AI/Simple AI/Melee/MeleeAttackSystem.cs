@@ -1,7 +1,6 @@
 ﻿using ECS_MONO;
 using Game.AI.Shared;
 using Game.Damage;
-using Game.Mob.AI;
 using Game.Mobs.Shared;
 
 namespace Game.AI
