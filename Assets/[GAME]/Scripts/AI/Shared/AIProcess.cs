@@ -4,7 +4,7 @@ namespace Game.AI.Shared
 {
     public sealed class AIProcess : EcsComponent
     {
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Delete(this);
         }

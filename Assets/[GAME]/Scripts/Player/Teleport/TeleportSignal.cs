@@ -8,7 +8,7 @@ namespace Game.Player.Teleport
         public Vector3 Position;
         public Quaternion Rotation;
 
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Delete(this);
         }

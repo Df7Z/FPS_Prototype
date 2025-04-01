@@ -8,6 +8,7 @@ namespace ECS_MONO
     public interface IEntity 
     {
         public C Add<C>(C component) where C : class, IEcsComponent;
+        public void AdapterAdd<C>(C component) where C : class, IEcsComponent;
         public C Add<C>() where C : class, IEcsComponent, new();
         public void SafeDel<C>() where C : class, IEcsComponent, new();
         public C SafeAdd<C>() where C : class, IEcsComponent, new();

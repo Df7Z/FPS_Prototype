@@ -19,9 +19,9 @@ namespace Game.Inventory
             entity.Get<CountedItemRuntime>().Current = Current;
         }
         
-        public override void OnSpawnPool(IEntity entity)
+        protected override void OnSpawnPool()
         {
-            entity.Get<CountedItemRuntime>().Current = Current;
+            Owner.Get<CountedItemRuntime>().Current = Current;
         }
     }
 }

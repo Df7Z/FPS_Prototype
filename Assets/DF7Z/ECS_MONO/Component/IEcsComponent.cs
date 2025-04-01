@@ -6,10 +6,10 @@ namespace ECS_MONO
     {
         public virtual uint Order => 0; //order initialize when entity instantiate on scene 
         public IEntity Owner { get; }
-        public ComponentType ComponentType { get; }
-        public void RegisterEntity(IEntity entity);
-        public void UnregisterEntity(IEntity entity);
-        public void OnSpawnPool(IEntity entity); //Awake || spawn from pool
-       public void OnDespawnPool(IEntity entity); //Return to pool
+        internal ComponentType ComponentType { get; }
+        internal void RegisterEntity(IEntity entity);
+        internal void UnregisterEntity(IEntity entity);
+        internal void OnOwnerEntitySpawnPool(IEntity entity); //Awake || spawn from pool
+        internal void OnOwnerEntityDespawnPool(IEntity entity); //Return to pool
     }
 }

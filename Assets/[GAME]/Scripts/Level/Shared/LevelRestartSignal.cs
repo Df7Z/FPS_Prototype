@@ -8,7 +8,7 @@ namespace Game.Level.Shared
         public LevelRestartParams RestartParams;
         public Transform PlayerSpawn;
         
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Delete(this);
         }

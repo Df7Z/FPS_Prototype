@@ -6,7 +6,7 @@ namespace Game.Inventory
     {
         public Slot Slot;
         
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Delete(this);
         }

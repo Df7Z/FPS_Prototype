@@ -10,42 +10,28 @@ namespace ECS_MONO
         public abstract WorldId ID { get; }
 
         private HashSet<E> _entities = new HashSet<E>(256);
-
-        private List<IEcsSystem<E>> _systems;
-        private List<IEcsSystem<E>> _updateSystems;
-        private List<IEcsSystem<E>> _fixedSystems;
-        private List<IEcsSystem<E>> _lateSystems;
         
-        private Dictionary<Type, IEcsWorldComponentPoolBase> _pools;
-
-        public T GetFirstWorldComponent<T>() where T : class, IEcsComponent
-        {
-            return (T) GetPool<T>().GetFirstComponent();
-        }
+        private SystemController<E> _systemController;
+        private PoolController<E> _poolController;
         
-        public IEcsWorldComponentPool<T> GetPool<T>() where T : class, IEcsComponent
-        {
-            if (_pools.TryGetValue(typeof(T), out IEcsWorldComponentPoolBase pool))
-            {
-                return (IEcsWorldComponentPool<T>)pool;
-            }
-
-            throw new Exception("Pool not created! Show InitPools method!");
-        }
-
+        public T GetFirstWorldComponent<T>() where T : class, IEcsComponent => _poolController.GetFirstWorldComponent<T>();
+        
+        public IEcsWorldComponentPool<T> GetPool<T>() where T : class, IEcsComponent => _poolController.GetPool<T>();
+        
         protected virtual void InitPools(in Dictionary<Type, IEcsWorldComponentPoolBase> p) { }
         public virtual E CreateEntity() => null;
         public virtual void DestroyEntity(E entity) { }
-        
+
+      
         public void RegisterEntity(E entity)
         {
             entity.RegisterInWorld(this);
 
             _entities.Add(entity);
 
-            OnEntityAddComponents(entity);
+            OnEntityAddToWorld(entity);
         }
-
+        
         public void UnregisterEntity(E entity)
         {
             _entities.Remove(entity);
@@ -65,180 +51,81 @@ namespace ECS_MONO
             return null;
         }
         
-        public void OnEntityClearComponents(E entity) //Del all components
+        internal void OnEntityClearComponents(E entity) => OnEntityDelFromWorld(entity);
+        
+        internal void OnEntityAddComponent<T>(E entity, T component) where T : class, IEcsComponent
         {
-            OnEntityDelFromWorld(entity);
+            _poolController.EntityAddComponent(entity, component);
+            _systemController.EntityAddComponent(entity, component);
         }
         
-        public void OnEntityAddComponent<T>(E entity, T component) where T : class, IEcsComponent
+        internal void OnEntityAddToWorld(E entity)
         {
-            if (component != null)
-            {
-                if (_pools.ContainsKey(typeof(T)))
-                {
-                    _pools[typeof(T)].Add(component);
-                }
-            }
-
-            TryRegisterEntityToSystems(entity);
-        }
-
-        private void TryRegisterEntityToSystems(E entity)
-        {
-            for (p = 0; p < _systems.Count; p++)
-            {
-                _systems[p].TryRegisterEntityComponents(entity); //Пытаемся зарегистрировать эту сущьность в систему
-            }
-        }
-
-        public void OnEntityAddComponents(E entity)
-        {
-            foreach (var type in entity.Types)
-            {
-                if (_pools.ContainsKey(type))
-                {
-                    _pools[type].Add(entity.Get(type));
-                }
-            }
-
-            TryRegisterEntityToSystems(entity);
+            _poolController.EntityAddToWorld(entity);    
+            _systemController.EntityAddToWorld(entity);
         }
 
         private void OnEntityDelFromWorld(E entity)
         {
-            foreach (var type in entity.Types)
-            {
-                if (_pools.ContainsKey(type))
-                {
-                    _pools[type].Remove(entity.Get(type));
-                }
-            }
-
-            SilentUnregisterEntityFromSystems(entity);
+            _poolController.EntityDelFromWorld(entity);    
+            _systemController.EntityDelFromWorld(entity);
         }
 
-        public void OnEntityDelComponent<T>(E entity, T component) where T : class, IEcsComponent
+        internal void OnEntityDelComponent<T>(E entity, T component) where T : class, IEcsComponent
         {
-          
-            if (component != null)
-            {
-                if (_pools.ContainsKey(typeof(T)))
-                {
-                    _pools[typeof(T)].Remove(component);
-                }
-            }
-
-            TryUnregisterEntityFromSystems(entity);
-        }
-
-        private void SilentUnregisterEntityFromSystems(E entity)
-        {
-            for (l = 0; l < _systems.Count; l++)
-            {
-                _systems[l].SilentUnregisterEntity(entity); //Пытаемся удалить сущьность из системы
-            }
+            _poolController.EntityDelComponent(entity, component);
+            _systemController.EntityDelComponent(entity, component);
         }
         
-        private void TryUnregisterEntityFromSystems(E entity)
-        {
-            for (l = 0; l < _systems.Count; l++)
-            {
-                _systems[l].TryUnregisterEntityComponents(entity); //Пытаемся удалить сущьность из системы
-            }
-        }
-
         public void InitWorld(IEcsCore core)
         {
             _core = core;
-            
             Init();
         }
-
-        private GameObject _systemsTransform;
-
+        
         private void Init()
         {
-            var systemsGo = new GameObject("Systems");
+            var systemsGo = new GameObject($"{ID}Systems");
             systemsGo.transform.parent = this.transform;
-            _systemsTransform = systemsGo;
-
-            _systems = new List<IEcsSystem<E>>();
-            _updateSystems = new List<IEcsSystem<E>>();
-            _fixedSystems = new List<IEcsSystem<E>>();
-            _lateSystems = new List<IEcsSystem<E>>();
-
+            
+            _systemController = new SystemController<E>(systemsGo);
+            
             InitSystems();
 
-            _systems.AddRange(_updateSystems);
-            _systems.AddRange(_fixedSystems);
-            _systems.AddRange(_lateSystems);
+            _systemController.InitSystemsFromWorld(this, _core);
+            
+            var pools = new Dictionary<Type, IEcsWorldComponentPoolBase>();
+            InitPools(pools);
+            _poolController = new PoolController<E>(pools);
 
-            foreach (var system in _systems)
-            {
-                system.InitFromWorld(this, _core);
-            }
+            EcsCore.OnInitialized += OnCoreInitialize;
+        }
 
-            _pools = new Dictionary<Type, IEcsWorldComponentPoolBase>();
-            InitPools(_pools);
+        private void OnCoreInitialize()
+        {
+            _systemController.OnCoreInitialize();
+        }
+
+        private void OnDestroy()
+        {
+            EcsCore.OnInitialized -= OnCoreInitialize;
         }
 
         #region SYSTEMS
         
+        
         protected abstract void InitSystems();
-
-        protected void CreateUpdateSystem<T>() where T : EcsSystemAbstract<E> =>
-            CreateSystem<T>(_updateSystems, _systemsTransform);
-
-        protected void CreateFixedUpdateSystem<T>() where T : EcsSystemAbstract<E> =>
-            CreateSystem<T>(_fixedSystems, _systemsTransform);
-
-        protected void CreateLateUpdateSystem<T>() where T : EcsSystemAbstract<E> =>
-            CreateSystem<T>(_lateSystems, _systemsTransform);
-
-        private void CreateSystem<T>(List<IEcsSystem<E>> list, GameObject parent) where T : EcsSystemAbstract<E>
-        {
-            if (parent.TryGetComponent(out T system))
-            {
-                list.Add(system);
-
-                return;
-            }
-
-            list.Add(parent.AddComponent<T>());
-        }
-
-        private int i, j, k, l, p;
-
-        public void Update()
-        {
-            for (i = 0; i < _updateSystems.Count; i++)
-            {
-                _updateSystems[i].UpdateSys();
-            }
-        }
-
-        public void FixedUpdate()
-        {
-            for (j = 0; j < _fixedSystems.Count; j++)
-            {
-                _fixedSystems[j].FixedUpdateSys();
-            }
-        }
-
-        public void LateUpdate()
-        {
-            for (k = 0; k < _lateSystems.Count; k++)
-            {
-                _lateSystems[k].LateUpdateSys();
-            }
-        }
-
+        protected void CreateUpdateSystem<T>() where T : EcsSystemAbstract<E> => _systemController.CreateUpdateSystem<T>();
+        protected void CreateFixedUpdateSystem<T>() where T : EcsSystemAbstract<E> => _systemController.CreateFixedUpdateSystem<T>();
+        protected void CreateLateUpdateSystem<T>() where T : EcsSystemAbstract<E> => _systemController.CreateLateUpdateSystem<T>();
+        
+        public void Update() => _systemController.Update();
+        public void FixedUpdate() => _systemController.FixedUpdate();
+        public void LateUpdate() => _systemController.LateUpdate();
+        
         public void Destruct()
         {
-            foreach (var system in _systems)
-            {
-                system.DestructFromWorld(this);
-            }
+            _systemController.Destruct(this);
         }
         
         #endregion

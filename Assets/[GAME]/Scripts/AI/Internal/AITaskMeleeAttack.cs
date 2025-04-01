@@ -4,7 +4,7 @@ namespace Game.AI
 {
     internal sealed class AITaskMeleeAttack : AITask //Ai give task - this in process
     {
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Delete(this);
         }

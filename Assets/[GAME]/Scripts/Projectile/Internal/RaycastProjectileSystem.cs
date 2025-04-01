@@ -13,6 +13,8 @@ namespace Game.Projectile
             Handle(projectile, (RaycastProjectileData) runtimeData.Data);
         }
 
+        
+        
         private void Handle(RaycastProjectileObject projectile, RaycastProjectileData data)
         {
             var source = projectile.Owner.Get<ProjectileObjectSource>().Source;

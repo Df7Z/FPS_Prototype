@@ -12,7 +12,7 @@ namespace Game.AI
 
         public void Set(EntityMono value) => _target = value;
 
-        public override void OnDespawnPool(IEntity entity)
+        protected override void OnDespawnPool()
         {
             Set(null);
         }

@@ -2,7 +2,7 @@
 {
     public sealed class MobDeathEvent : MobEvent
     {
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Delete(this);
         }

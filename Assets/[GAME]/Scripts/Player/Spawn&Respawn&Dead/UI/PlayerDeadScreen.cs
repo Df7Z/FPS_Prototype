@@ -19,7 +19,7 @@ namespace Game.Player.UI
             SetView(false);
         }
 
-        public override void OnSpawnPool(IEntity entity)
+        protected override void OnSpawnPool()
         {
             SetView(false);
         }

@@ -15,7 +15,7 @@ namespace Game.Inventory
         public void SetOwnerHotSlot(HotSlot value) => _ownerHotSlot = value;
         public void SetOwnerSlot(Slot value) => _ownerSlot = value;
 
-        public override void OnDespawnPool(IEntity entity)
+        protected override void OnDespawnPool()
         {
             SetOwnerSlot(null);
             SetOwnerHotSlot(null);

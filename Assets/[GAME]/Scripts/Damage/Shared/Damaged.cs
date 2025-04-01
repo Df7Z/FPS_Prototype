@@ -13,7 +13,7 @@ namespace Game.Damage
 
         public uint EnduranceDefault => enduranceDefault;
         
-        public override void OnDespawnPool(IEntity entity) => ResetToDefault();
+        protected override void OnDespawnPool() => ResetToDefault();
 
         protected override void OnRegisterEntity(IEntity entity) => ResetToDefault();
         

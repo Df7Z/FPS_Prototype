@@ -14,7 +14,7 @@ namespace ECS_MONO
         private const int _initSizeCollection = 8;
         private HashSet<IEcsComponent> _components;
         private HashSet<Type> _types;
-        private EcsWorldAbstract<EntityMono> _entityWorld;
+        internal EcsWorldAbstract<EntityMono> _entityWorld;
         private EcsCore _core;
         private bool _inPool;
 
@@ -54,7 +54,7 @@ namespace ECS_MONO
                 _components.Add(component);
                 _types.Add(component.GetType());
                 component.RegisterEntity(this);
-                component.OnSpawnPool(this);   
+                component.OnOwnerEntitySpawnPool(this);   
             }
 
             var adaptersComponents = GetComponents<IComponentAdapter>().OrderBy(adapter => adapter.Order).ToArray();
@@ -67,7 +67,7 @@ namespace ECS_MONO
                 adapter.SilentDestroy();
             }
             
-            _entityWorld.OnEntityAddComponents(this);
+            _entityWorld.OnEntityAddToWorld(this);
         }
 
        
@@ -81,9 +81,7 @@ namespace ECS_MONO
 
         private void SpawnFromPool() 
         {
-            var world = _core.GetWorld<EntityMono>(_world);
-            
-            world.RegisterEntity(this);
+            _core.GetWorld<EntityMono>(_world).RegisterEntity(this);
             
             ErrorWorld();
             
@@ -95,7 +93,7 @@ namespace ECS_MONO
                 __temp.Add(component);
             
             foreach (var component in __temp)
-                component.OnSpawnPool(this); //Добавление, удаление при спавне
+                component.OnOwnerEntitySpawnPool(this); //Добавление, удаление при спавне
         }
 
         private HashSet<IEcsComponent> __temp = new HashSet<IEcsComponent>();
@@ -110,17 +108,28 @@ namespace ECS_MONO
            
             foreach (var component in _components)
                 __temp.Add(component);
-            
+
             foreach (var component in __temp)
-                component.OnDespawnPool(this);
+            {
+                component.OnOwnerEntityDespawnPool(this);
+            }
+
+            _core.GetWorld<EntityMono>(_world).UnregisterEntity(this);
             
-            _entityWorld.UnregisterEntity(this);
+           //_entityWorld.UnregisterEntity(this);
         }
 
         public void Clear()
         {
+            __temp.Clear();
+           
             foreach (var component in _components)
+                __temp.Add(component);
+            
+            foreach (var component in __temp)
             {
+                component.OnOwnerEntityDespawnPool(this);
+                
                 component.UnregisterEntity(this);
 
                 if (component.ComponentType == ComponentType.Mono)
@@ -212,7 +221,14 @@ namespace ECS_MONO
 
             throw new Exception($"Entity not has {type} component!");
         }
-        
+
+        public void AdapterAdd<C>(C component) where C : class, IEcsComponent
+        {
+            Add(component);
+
+            component.OnOwnerEntitySpawnPool(this);
+        }
+
         public C Add<C>() where C : class, IEcsComponent, new()
         {
             return Add<C>(ComponentPool.Give<C>());
@@ -225,7 +241,7 @@ namespace ECS_MONO
             return Add(ComponentPool.Give<C>());
         }
         
-        public C Add<C>(C component) where C : class,IEcsComponent
+        public C Add<C>(C component) where C : class, IEcsComponent
         {
             ErrorWorld();
             ErrorType();
@@ -249,7 +265,7 @@ namespace ECS_MONO
             
             var component = gameObject.AddComponent<C>();
 
-            if (component.ComponentType != ComponentType.Mono) throw new Exception("'AddNet' for mono components only!");
+            if ( ((IEcsComponent)component).ComponentType != ComponentType.Mono) throw new Exception("'AddNet' for mono components only!");
             
             return Add(component);
         }
@@ -274,7 +290,7 @@ namespace ECS_MONO
 
             Del<C>();
         }
-
+        
         public void Del<C>() where C : class, IEcsComponent, new()
         {
             ErrorWorld();

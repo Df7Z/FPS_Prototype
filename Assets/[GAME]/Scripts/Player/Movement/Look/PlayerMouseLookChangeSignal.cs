@@ -7,7 +7,7 @@ namespace Game.Player.Look
     {
         public Quaternion Target;
 
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Delete(this);
         }

@@ -19,7 +19,7 @@ namespace Game.Inventory
             SetView(false);
         }
 
-        public override void OnDespawnPool(IEntity entity)
+        protected override void OnDespawnPool()
         {
             SetView(false);
         }

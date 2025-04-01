@@ -6,7 +6,7 @@ namespace Game.Projectile.Shared
     {
         public ProjectileData Data;
         
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Delete(this);
         }

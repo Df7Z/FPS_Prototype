@@ -8,7 +8,7 @@ namespace Game.Inventory
       
         public float Time;
 
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Time = 0f;
             

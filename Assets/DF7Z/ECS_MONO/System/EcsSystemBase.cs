@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace ECS_MONO
 {
-    public abstract class EcsSystemBase<T, E> : EcsSystemAbstract<E> where T : EcsNetBaseSystemComponents<E>, new() where E : class, IEntity
+    public abstract class EcsSystemBase<T, E> : EcsSystemAbstract<E> where T : EcsBaseSystemComponents<E>, new() where E : class, IEntity
     {
-        private IEcsCore _core;
-
         protected EcsWorldAbstract<E> GetWorld(WorldId id) => (EcsWorldAbstract<E>) EcsCore.I.GetWorld<E>(id);
         
         private ObjectPool<T> _pool;
@@ -18,10 +16,8 @@ namespace ECS_MONO
 
         private bool _isUpdate; //Hash используется потоком
 
-        protected override void Init(IEcsCore core)
+        internal override void InitSystem(IEcsCore core)
         {
-            _core = core;
-            
             EcsCore.OnInitialized += OnCoreInitialized;
             
             _toDelete = new HashSet<T>(DefaultComponentsDelCapacity);
@@ -33,7 +29,7 @@ namespace ECS_MONO
             
             _components = new HashSet<T>(DefaultInitComponentsCapacity);
         }
-
+        
         private void OnCoreInitializedComplete()
         {
             OnCoreInitialized();
@@ -50,7 +46,7 @@ namespace ECS_MONO
 
         protected virtual void OnCoreInitialized() {}
 
-        protected abstract void InitRequiredTypesForSystem(out Type[] types);
+        internal abstract void InitRequiredTypesForSystem(out Type[] types);
         
         private T GetEntityComponents(E entity)
         {
@@ -62,7 +58,7 @@ namespace ECS_MONO
             return null;
         }
         
-        public override bool TryRegisterEntityComponents(E entity)
+        internal override bool TryRegisterEntityComponents(E entity)
         {
             if (!CanRegisterEntity(entity)) return false; //Компонент отсутсвует
  
@@ -86,7 +82,7 @@ namespace ECS_MONO
             return true;
         }
 
-        public override bool SilentUnregisterEntityComponents(E entity)
+        internal override bool SilentUnregisterEntityComponents(E entity)
         {
             foreach (var component in _components)
             {
@@ -111,7 +107,7 @@ namespace ECS_MONO
             return false;
         }
 
-        public override void SilentUnregisterEntity(E entity)
+        internal override void SilentUnregisterEntity(E entity)
         {
             foreach (var component in _components)
             {
@@ -133,7 +129,7 @@ namespace ECS_MONO
             }
         }
 
-        public override bool TryUnregisterEntityComponents(E entity)
+        internal override bool TryUnregisterEntityComponents(E entity)
         {
             if (!CanUnregisterEntity(entity)) return false; //Компоненты не удалёны
 
@@ -207,9 +203,9 @@ namespace ECS_MONO
         }
 
 
-        protected internal abstract void InitNewComponentField(in E entity, in T components);
-        protected internal abstract void UpdateSystem(T components);
-        protected internal abstract void LateUpdateSystem(T components);
-        protected internal abstract void FixedUpdateSystem(T components);
+        internal abstract void InitNewComponentField(in E entity, in T components);
+        internal abstract void UpdateSystem(T components);
+        internal abstract void LateUpdateSystem(T components);
+        internal abstract void FixedUpdateSystem(T components);
     }
 }

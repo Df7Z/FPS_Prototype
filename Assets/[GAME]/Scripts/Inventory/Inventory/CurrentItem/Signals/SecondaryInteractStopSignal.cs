@@ -2,7 +2,7 @@
 {
     internal sealed class SecondaryInteractStopSignal : InteractSignal
     {
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Delete(this);
         }

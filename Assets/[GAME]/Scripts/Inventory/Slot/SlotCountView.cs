@@ -15,7 +15,7 @@ namespace Game.Inventory
             SetText(string.Empty);
         }
 
-        public override void OnDespawnPool(IEntity entity)
+        protected override void OnDespawnPool()
         {
             SetText(string.Empty);
         }

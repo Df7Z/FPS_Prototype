@@ -21,7 +21,7 @@ namespace Game.Inventory
 
         protected override void OnRegisterEntity(IEntity entity) => Initialize(entity);
 
-        public override void OnSpawnPool(IEntity entity) => Initialize(entity);
+        protected override void OnSpawnPool() => Initialize(Owner);
 
         private void Initialize(IEntity entity)
         {

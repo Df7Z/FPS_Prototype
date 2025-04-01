@@ -6,7 +6,7 @@ namespace ECS_MONO
     {
         public virtual uint Order => 0;
         public IEntity Owner => _entity;
-        public ComponentType ComponentType => ComponentType.Default;
+        ComponentType IEcsComponent.ComponentType => ComponentType.Default;
         
         private IEntity _entity;
 
@@ -14,28 +14,28 @@ namespace ECS_MONO
         {
             Owner.SilentDel(component);
         }
-        
-        public void RegisterEntity(IEntity entity)
+
+        void IEcsComponent.RegisterEntity(IEntity entity)
         {
             _entity = entity;
             
             OnRegisterEntity(entity);
         }
-        
-        public void UnregisterEntity(IEntity entity)
+
+        void IEcsComponent.UnregisterEntity(IEntity entity)
         {
             OnUnregisterEntity(entity);
             
             _entity = null;
         }
 
-        public void OnSpawnPool(IEntity entity) => OnSpawnPool();
-        public void OnDespawnPool(IEntity entity) => OnDespawnPool();
+        void IEcsComponent.OnOwnerEntitySpawnPool(IEntity entity) => OnSpawnPool();
+        void IEcsComponent.OnOwnerEntityDespawnPool(IEntity entity) => OnDespawnPool();
         
         protected virtual void OnRegisterEntity(IEntity entity) {}
         protected virtual void OnUnregisterEntity(IEntity entity) {}
 
-        public virtual void OnSpawnPool() { }
-        public virtual void OnDespawnPool() { }
+        protected virtual void OnSpawnPool() { }
+        protected virtual void OnDespawnPool() { }
     }
 }

@@ -12,7 +12,7 @@ namespace Game.AI
         
         public float Radius => _radius;
 
-        public override void OnDespawnPool(IEntity entity)
+        protected override void OnDespawnPool()
         {
             Once = false;
         }

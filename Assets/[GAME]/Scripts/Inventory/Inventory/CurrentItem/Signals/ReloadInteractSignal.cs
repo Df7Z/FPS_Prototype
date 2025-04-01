@@ -2,7 +2,7 @@
 {
     internal sealed class ReloadInteractSignal : InteractSignal
     {
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Delete(this);
         }

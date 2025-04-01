@@ -11,12 +11,12 @@ namespace Game.AI
 
         public NavMeshAgent Agent => _agent;
 
-        public override void OnDespawnPool(IEntity entity)
+        protected override void OnDespawnPool()
         {
             _agent.enabled = false;
         }
 
-        public override void OnSpawnPool(IEntity entity)
+        protected override void OnSpawnPool()
         {
             _agent.enabled = true;
         }

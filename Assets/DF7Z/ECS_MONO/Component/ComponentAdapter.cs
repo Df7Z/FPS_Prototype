@@ -11,8 +11,8 @@ namespace ECS_MONO
         public void SetComponent(EntityMono entityMono)
         {
             Init(entityMono);
-            var component = entityMono.Add(_data);
-            component.OnSpawnPool();  
+            
+            entityMono.AdapterAdd(_data);
         }
 
         public void SilentDestroy() => Destroy(this);

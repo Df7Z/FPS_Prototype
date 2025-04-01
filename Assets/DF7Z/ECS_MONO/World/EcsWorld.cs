@@ -6,8 +6,8 @@
         {
             var entity = EntityPool.Get();
 
-            entity.RegisterInWorld(this);
-            
+            RegisterEntity(entity);
+           
             return entity;
         }
 
@@ -15,7 +15,7 @@
         {
             entity.Clear();
             
-            entity.UnregisterFromWorld(this);
+            UnregisterEntity(entity);
             
             EntityPool.Return(entity);
         }

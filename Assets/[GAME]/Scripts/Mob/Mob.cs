@@ -11,9 +11,9 @@ namespace Game.Mobs
 
         public AISource AI => _ai;
         
-        public override void OnSpawnPool(IEntity entity)
+        protected override void OnSpawnPool()
         {
-            entity.SafeAdd<StartAISignal>(); //Start AI logic
+            Owner.SafeAdd<StartAISignal>(); //Start AI logic
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Game.Player
     {
         public CursorLockMode Target = CursorLockMode.None;
         
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Delete(this);
         }

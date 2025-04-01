@@ -17,9 +17,7 @@ namespace ECS_MONO
             _components = new HashSet<IEcsComponent>(_initSizeCollection);
             _types = new HashSet<Type>(_initSizeCollection);
         }
-
-       
-
+        
         public bool Has<C>() where C : class, IEcsComponent
         {
             return _types.Contains(typeof(C));
@@ -98,6 +96,13 @@ namespace ECS_MONO
 
         public HashSet<IEcsComponent> Components => _components;
         public HashSet<Type> Types => _types;
+
+        public void AdapterAdd<C>(C component) where C : class, IEcsComponent
+        {
+            Add(component);
+
+            component.OnOwnerEntitySpawnPool(this);
+        }
 
         public C Add<C>() where C : class, IEcsComponent, new()
         {

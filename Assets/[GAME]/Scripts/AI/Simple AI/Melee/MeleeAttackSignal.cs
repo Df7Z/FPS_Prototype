@@ -5,7 +5,7 @@ namespace Game.AI
 {
     internal sealed class MeleeAttackSignal : EcsComponent
     {
-        public override void OnDespawnPool()
+        protected override void OnDespawnPool()
         {
             Delete(this);
         }
