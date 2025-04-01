@@ -1,8 +1,8 @@
 ﻿using ECS_MONO;
 
-namespace Game.Mob.AI
+namespace Game.AI
 {
-    internal sealed class AITaskProcess : EcsComponent //Ai give task - this in process
+    internal sealed class AITaskPatrol : AITask
     {
         public override void OnDespawnPool()
         {

@@ -142,6 +142,8 @@ GameObject:
   - component: {fileID: 8869744420289232937}
   - component: {fileID: 4055287051328571765}
   - component: {fileID: 1924093361513340224}
+  - component: {fileID: 41276983499527799}
+  - component: {fileID: 6234416670233590656}
   m_Layer: 0
   m_Name: AI
   m_TagString: Untagged
@@ -242,7 +244,35 @@ MonoBehaviour:
   _damage:
     _count: 10
   _time: 0.75
-  _minDistance: 1.5
+  _minDistance: 2
+--- !u!114 &41276983499527799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6041985362688478213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0520d4c0207c48bdab63baef687c8f50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _radiusNewPointMin: 6
+  _radiusNewPointMax: 15
+  _waitTime: 2
+--- !u!114 &6234416670233590656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6041985362688478213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c1e5668ec74e6887d499fef405e680, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _radius: 3
 --- !u!1 &6124998261527524983
 GameObject:
   m_ObjectHideFlags: 0

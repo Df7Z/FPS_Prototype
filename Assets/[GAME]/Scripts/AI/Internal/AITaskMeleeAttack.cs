@@ -1,9 +1,8 @@
 ﻿using ECS_MONO;
-using Game.Damage;
 
 namespace Game.AI
 {
-    internal sealed class MeleeAttackSignal : EcsComponent
+    internal sealed class AITaskMeleeAttack : AITask //Ai give task - this in process
     {
         public override void OnDespawnPool()
         {

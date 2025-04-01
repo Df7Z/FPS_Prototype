@@ -1,9 +1,10 @@
 ﻿using ECS_MONO;
 using Game.AI.Shared;
 using Game.Damage;
+using Game.Mob.AI;
 using Game.Mobs.Shared;
 
-namespace Game.Mob.AI
+namespace Game.AI
 {
     internal sealed class MeleeAttackSystem : EcsSystemMono<MeleeAttackSignal, MeleeAttack, AITarget, AISource, AIProcess>
     {
@@ -20,7 +21,7 @@ namespace Game.Mob.AI
 
             source.Mob.SafeAdd<MobMeleeAttackEvent>(); //Send event for view -> for mob
             
-            e.SafeAdd<AITaskProcess>();
+            e.SafeAdd<AITaskMeleeAttack>();
         }
         
         

@@ -1,12 +1,14 @@
 ﻿using System;
 using ECS_MONO;
+using Game.AI;
+
 using Game.AI.Shared;
 using Game.Damage;
 using Game.Mobs.Shared;
 using Game.Player;
 using UnityEngine;
 
-namespace Game.Mob.AI
+namespace Game.AI
 {
     internal sealed class SimpleAISystem : EcsSystemMono<SimpleAI, AISource, AIProcess>
     {
@@ -14,9 +16,7 @@ namespace Game.Mob.AI
         {
             //Ai update - delta.time
             
-            
-            
-            if (e.Has<AITaskProcess>())
+            if (e.Has<AITaskMeleeAttack>())
             {
                 //Task process, wait finish
                 
@@ -43,30 +43,68 @@ namespace Game.Mob.AI
         {
             if (target.HasTarget) //проверить радиус по тз
             {
-                //Check melee attack
-                if (!TryMeleeAttack(e, target, ai, source))
+                if (e.TryGet(out Aggressivity aggressivity))
                 {
-                    //Move to target
-                    MoveAgent(e, target);
+                    if (!aggressivity.Once)
+                    {
+                        var distance = Vector3.Distance(source.Mob.transform.position,
+                            target.Target.transform.position);
+
+                        if (distance < aggressivity.Radius * 2)
+                        {
+                            aggressivity.Once = true;
+
+                            ChaseTarget(e, target, ai, source);
+
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        ChaseTarget(e, target, ai, source);
+
+                        return;
+                    }
+                }
+                else
+                {
+                    ChaseTarget(e, target, ai, source);
+
+                    return;
                 }
             }
-            else
+            
+            Patrol(e, target, ai, source);
+        }
+
+        private void ChaseTarget(EntityMono e, AITarget target, SimpleAI ai, AISource source)
+        {
+            //Check melee attack
+            if (!TryMeleeAttack(e, target, ai, source))
             {
-                //Stay => patrolling
-                StopAgent(e);
+                //Move to target
+                MoveAgent(e, target);
+                    
+                e.SafeAdd<AITaskChase>();
+            }
+        }
+        
+        private void Patrol(EntityMono e, AITarget target, SimpleAI ai, AISource source)
+        {
+            if (!e.Has<Patrol>()) throw new Exception();
+            
+            if (!e.Has<AITaskPatrol>())
+            {
+                e.Add<StartPatrolSignal>();
             }
         }
         
         private bool TryMeleeAttack(EntityMono e, AITarget target, SimpleAI ai, AISource source)
         {
-            if (EcsGlobalSetup.IsDebug)
-            {
-                if (source.Mob.transform == null) throw new Exception();
-                if (target.Target.transform == null) throw new Exception();
-            }
+            if (!e.Has<MeleeAttack>()) throw new Exception();
             
             var distance = Vector3.Distance(source.Mob.transform.position, target.Target.transform.position);
-
+            
             var attack = e.Get<MeleeAttack>();
 
             if (distance > attack.MinDistance) return false;

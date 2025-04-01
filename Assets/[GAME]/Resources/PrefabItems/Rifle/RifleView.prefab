@@ -216,7 +216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fireRate: 0.08
   _distance: 200
-  _projectileSpawnPoint: {fileID: 3499476724953787580}
+  _projectileSpawnPoint: {fileID: 123008872269766359}
   _raycastProjectileData: {fileID: 11400000, guid: c49cbd1808f4bfb4f84bc3286c9a6b82,
     type: 2}
   _flashSpawnPoint: {fileID: 3499476724953787580}

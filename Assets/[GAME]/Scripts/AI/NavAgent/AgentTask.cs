@@ -1,7 +1,7 @@
 ﻿using ECS_MONO;
 using UnityEngine;
 
-namespace Game.Mob.AI
+namespace Game.AI
 {
     internal sealed class AgentTask : EcsComponent
     {

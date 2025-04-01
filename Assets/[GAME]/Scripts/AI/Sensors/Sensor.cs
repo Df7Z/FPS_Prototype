@@ -1,6 +1,6 @@
 ﻿using ECS_MONO;
 
-namespace Game.Mob.Sensors
+namespace Game.AI.Sensors
 {
     internal abstract class Sensor : EcsComponent
     {

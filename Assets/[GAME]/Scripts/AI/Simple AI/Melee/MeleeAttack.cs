@@ -2,7 +2,7 @@
 using Game.Damage;
 using UnityEngine;
 
-namespace Game.Mob.AI
+namespace Game.AI
 {
     internal class MeleeAttack : EcsComponentMono
     {

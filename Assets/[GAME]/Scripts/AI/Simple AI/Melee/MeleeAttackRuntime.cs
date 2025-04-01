@@ -1,6 +1,6 @@
 ﻿using ECS_MONO;
 
-namespace Game.Mob.AI
+namespace Game.AI
 {
     internal sealed class MeleeAttackRuntime : EcsComponent
     {

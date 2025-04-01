@@ -1,7 +1,7 @@
 ﻿using ECS_MONO;
 using Game.AI.Shared;
 
-namespace Game.Mob.AI
+namespace Game.AI
 {
     internal sealed class CheckSourceExistAISystem : EcsSystemMono<AISource, AIProcess>
     {

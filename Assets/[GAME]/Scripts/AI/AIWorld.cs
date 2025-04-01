@@ -1,6 +1,7 @@
 ﻿using ECS_MONO;
+using Game.Mob.AI;
 
-namespace Game.Mob.AI
+namespace Game.AI
 {
     public class AIWorld : EcsWorldMono
     {
@@ -15,6 +16,15 @@ namespace Game.Mob.AI
            
            CreateUpdateSystem<MeleeAttackSystem>();
            CreateUpdateSystem<MeleeAttackExpectationSystem>();
+           
+           CreateUpdateSystem<StartPatrolSystem>();
+           CreateUpdateSystem<PatrolSystem>();
+           
+           
+           
+           
+           
+           CreateUpdateSystem<TaskPrioritySystem>();
         }
     }
 }
