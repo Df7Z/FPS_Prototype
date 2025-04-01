@@ -8,6 +8,7 @@ namespace Game.Player.Test
     {
         protected override void Run(EntityMono e, PlayerInput c1)
         {
+#if FALSE
             if (Input.GetKeyDown(KeyCode.X))
             {
                 var damage = new DamageData();
@@ -21,6 +22,7 @@ namespace Game.Player.Test
                 damage.Set(9999);
                 damage.CreateTransaction(e.Get<Damaged>(), e);
             }
+#endif
         }
     }
 }
